@@ -158,7 +158,7 @@ def _load_libalfcrypto():
             topazCryptoDecrypt(ctx, data, out, len(data))
             return out.raw
 
-    print u"Using Library AlfCrypto DLL/DYLIB/SO"
+    print("Using Library AlfCrypto DLL/DYLIB/SO")
     return (AES_CBC, Pukall_Cipher, Topaz_Cipher)
 
 
@@ -177,13 +177,13 @@ def _load_python_alfcrypto():
             if len(key)!=16:
                 raise Exception('Pukall_Cipher: Bad key length.')
             wkey = []
-            for i in xrange(8):
+            for i in range(8):
                 wkey.append(ord(key[i*2])<<8 | ord(key[i*2+1]))
             dst = ""
-            for i in xrange(len(src)):
+            for i in range(len(src)):
                 temp1 = 0;
                 byteXorVal = 0;
-                for j in xrange(8):
+                for j in range(8):
                     temp1 ^= wkey[j]
                     sum2  = (sum2+j)*20021 + sum1
                     sum1  = (temp1*346)&0xFFFF
@@ -196,7 +196,7 @@ def _load_python_alfcrypto():
                 curByte = ((curByte ^ (byteXorVal >> 8)) ^ byteXorVal) & 0xFF
                 if decryption:
                     keyXorVal = curByte * 257;
-                for j in xrange(8):
+                for j in range(8):
                     wkey[j] ^= keyXorVal;
                 dst+=chr(curByte)
             return dst
@@ -244,7 +244,7 @@ def _load_python_alfcrypto():
             cleartext = self.aes.decrypt(iv + data)
             return cleartext
 
-    print u"Using Library AlfCrypto Python"
+    print("Using Library AlfCrypto Python")
     return (AES_CBC, Pukall_Cipher, Topaz_Cipher)
 
 

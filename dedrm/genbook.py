@@ -86,7 +86,7 @@ def getMetaArray(metaFile):
     result = {}
     fo = file(metaFile,'rb')
     size = readEncodedNumber(fo)
-    for i in xrange(size):
+    for i in range(size):
         tag = readString(fo)
         value = readString(fo)
         result[tag] = value
@@ -103,7 +103,7 @@ class Dictionary(object):
         self.fo = file(dictFile,'rb')
         self.stable = []
         self.size = readEncodedNumber(self.fo)
-        for i in xrange(self.size):
+        for i in range(self.size):
             self.stable.append(self.escapestr(readString(self.fo)))
         self.pos = 0
     def escapestr(self, str):
@@ -117,7 +117,7 @@ class Dictionary(object):
             self.pos = val
             return self.stable[self.pos]
         else:
-            print "Error: %d outside of string table limits" % val
+            print("Error: %d outside of string table limits" % val)
             raise TpzDRMError('outside or string table limits')
             # sys.exit(-1)
     def getSize(self):
@@ -139,7 +139,7 @@ class PageDimParser(object):
         else:
             end = min(cnt,end)
         foundat = -1
-        for j in xrange(pos, end):
+        for j in range(pos, end):
             item = docList[j]
             if item.find('=') >= 0:
                 (name, argres) = item.split('=')
@@ -192,7 +192,7 @@ class GParser(object):
     def getData(self, path):
         result = None
         cnt = len(self.flatdoc)
-        for j in xrange(cnt):
+        for j in range(cnt):
             item = self.flatdoc[j]
             if item.find('=') >= 0:
                 (name, argt) = item.split('=')
@@ -204,7 +204,7 @@ class GParser(object):
                 result = argres
                 break
         if (len(argres) > 0) :
-            for j in xrange(0,len(argres)):
+            for j in range(0,len(argres)):
                 argres[j] = int(argres[j])
         return result
     def getGlyphDim(self, gly):
@@ -220,7 +220,7 @@ class GParser(object):
         tx = self.vx[self.gvtx[gly]:self.gvtx[gly+1]]
         ty = self.vy[self.gvtx[gly]:self.gvtx[gly+1]]
         p = 0
-        for k in xrange(self.glen[gly], self.glen[gly+1]):
+        for k in range(self.glen[gly], self.glen[gly+1]):
             if (p == 0):
                 zx = tx[0:self.vlen[k]+1]
                 zy = ty[0:self.vlen[k]+1]
@@ -268,32 +268,32 @@ class GlyphDict(object):
 def generateBook(bookDir, raw, fixedimage):
     # sanity check Topaz file extraction
     if not os.path.exists(bookDir) :
-        print "Can not find directory with unencrypted book"
+        print("Can not find directory with unencrypted book")
         return 1
 
     dictFile = os.path.join(bookDir,'dict0000.dat')
     if not os.path.exists(dictFile) :
-        print "Can not find dict0000.dat file"
+        print("Can not find dict0000.dat file")
         return 1
 
     pageDir = os.path.join(bookDir,'page')
     if not os.path.exists(pageDir) :
-        print "Can not find page directory in unencrypted book"
+        print("Can not find page directory in unencrypted book")
         return 1
 
     imgDir = os.path.join(bookDir,'img')
     if not os.path.exists(imgDir) :
-        print "Can not find image directory in unencrypted book"
+        print("Can not find image directory in unencrypted book")
         return 1
 
     glyphsDir = os.path.join(bookDir,'glyphs')
     if not os.path.exists(glyphsDir) :
-        print "Can not find glyphs directory in unencrypted book"
+        print("Can not find glyphs directory in unencrypted book")
         return 1
 
     metaFile = os.path.join(bookDir,'metadata0000.dat')
     if not os.path.exists(metaFile) :
-        print "Can not find metadata0000.dat in unencrypted book"
+        print("Can not find metadata0000.dat in unencrypted book")
         return 1
 
     svgDir = os.path.join(bookDir,'svg')
@@ -307,10 +307,10 @@ def generateBook(bookDir, raw, fixedimage):
 
     otherFile = os.path.join(bookDir,'other0000.dat')
     if not os.path.exists(otherFile) :
-        print "Can not find other0000.dat in unencrypted book"
+        print("Can not find other0000.dat in unencrypted book")
         return 1
 
-    print "Updating to color images if available"
+    print("Updating to color images if available")
     spath = os.path.join(bookDir,'color_img')
     dpath = os.path.join(bookDir,'img')
     filenames = os.listdir(spath)
@@ -322,7 +322,7 @@ def generateBook(bookDir, raw, fixedimage):
         imgdata = file(sfile,'rb').read()
         file(dfile,'wb').write(imgdata)
 
-    print "Creating cover.jpg"
+    print("Creating cover.jpg")
     isCover = False
     cpath = os.path.join(bookDir,'img')
     cpath = os.path.join(cpath,'img0000.jpg')
@@ -333,10 +333,10 @@ def generateBook(bookDir, raw, fixedimage):
         isCover = True
 
 
-    print 'Processing Dictionary'
+    print('Processing Dictionary')
     dict = Dictionary(dictFile)
 
-    print 'Processing Meta Data and creating OPF'
+    print('Processing Meta Data and creating OPF')
     meta_array = getMetaArray(metaFile)
 
     # replace special chars in title and authors like & < >
@@ -360,7 +360,7 @@ def generateBook(bookDir, raw, fixedimage):
         mlst = None
         file(xname, 'wb').write(metastr)
 
-    print 'Processing StyleSheet'
+    print('Processing StyleSheet')
 
     # get some scaling info from metadata to use while processing styles
     # and first page info
@@ -394,7 +394,7 @@ def generateBook(bookDir, raw, fixedimage):
     if (pw == '-1') or (pw == '0') : pw = '8500'
     meta_array['pageHeight'] = ph
     meta_array['pageWidth'] = pw
-    if 'fontSize' not in meta_array.keys():
+    if 'fontSize' not in list(meta_array.keys()):
         meta_array['fontSize'] = fontsize
 
     # process other.dat for css info and for map of page files to svg images
@@ -414,7 +414,7 @@ def generateBook(bookDir, raw, fixedimage):
     # create a map from page ids to list of page file nums to process for that page
     for i in range(len(pageidnums)):
         id = pageidnums[i]
-        if id in pageIDMap.keys():
+        if id in list(pageIDMap.keys()):
             pageIDMap[id].append(i)
         else:
             pageIDMap[id] = [i]
@@ -426,7 +426,7 @@ def generateBook(bookDir, raw, fixedimage):
         xname = os.path.join(xmlDir, 'other0000.xml')
         file(xname, 'wb').write(convert2xml.getXML(dict, otherFile))
 
-    print 'Processing Glyphs'
+    print('Processing Glyphs')
     gd = GlyphDict()
     filenames = os.listdir(glyphsDir)
     filenames = sorted(filenames)
@@ -440,7 +440,7 @@ def generateBook(bookDir, raw, fixedimage):
     counter = 0
     for filename in filenames:
         # print '     ', filename
-        print '.',
+        print('.', end=' ')
         fname = os.path.join(glyphsDir,filename)
         flat_xml = convert2xml.fromData(dict, fname)
 
@@ -449,7 +449,7 @@ def generateBook(bookDir, raw, fixedimage):
             file(xname, 'wb').write(convert2xml.getXML(dict, fname))
 
         gp = GParser(flat_xml)
-        for i in xrange(0, gp.count):
+        for i in range(0, gp.count):
             path = gp.getPath(i)
             maxh, maxw = gp.getGlyphDim(i)
             fullpath = '<path id="gl%d" d="%s" fill="black" /><!-- width=%d height=%d -->\n' % (counter * 256 + i, path, maxw, maxh)
@@ -459,7 +459,7 @@ def generateBook(bookDir, raw, fixedimage):
     glyfile.write('</defs>\n')
     glyfile.write('</svg>\n')
     glyfile.close()
-    print " "
+    print(" ")
 
 
     # start up the html
@@ -481,7 +481,7 @@ def generateBook(bookDir, raw, fixedimage):
     hlst.append('<link href="style.css" rel="stylesheet" type="text/css" />\n')
     hlst.append('</head>\n<body>\n')
 
-    print 'Processing Pages'
+    print('Processing Pages')
     # Books are at 1440 DPI.  This is rendering at twice that size for
     # readability when rendering to the screen.
     scaledpi = 1440.0
@@ -495,7 +495,7 @@ def generateBook(bookDir, raw, fixedimage):
 
     for filename in filenames:
         # print '     ', filename
-        print ".",
+        print(".", end=' ')
         fname = os.path.join(pageDir,filename)
         flat_xml = convert2xml.fromData(dict, fname)
 
@@ -517,8 +517,8 @@ def generateBook(bookDir, raw, fixedimage):
     hlst = None
     file(os.path.join(bookDir, htmlFileName), 'wb').write(htmlstr)
 
-    print " "
-    print 'Extracting Table of Contents from Amazon OCR'
+    print(" ")
+    print('Extracting Table of Contents from Amazon OCR')
 
     # first create a table of contents file for the svg images
     tlst = []
@@ -550,7 +550,7 @@ def generateBook(bookDir, raw, fixedimage):
     toclst = tocentries.split('\n')
     toclst.pop()
     for entry in toclst:
-        print entry
+        print(entry)
         title, pagenum = entry.split('|')
         id = pageidnums[int(pagenum)]
         if (raw):
@@ -580,7 +580,7 @@ def generateBook(bookDir, raw, fixedimage):
     slst.append('</head>\n')
     slst.append('<body>\n')
 
-    print "Building svg images of each book page"
+    print("Building svg images of each book page")
     slst.append('<h2>List of Pages</h2>\n')
     slst.append('<div>\n')
     idlst = sorted(pageIDMap.keys())
@@ -593,7 +593,7 @@ def generateBook(bookDir, raw, fixedimage):
             nextid = idlst[j+1]
         else:
             nextid = None
-        print '.',
+        print('.', end=' ')
         pagelst = pageIDMap[pageid]
         flst = []
         for page in pagelst:
@@ -618,7 +618,7 @@ def generateBook(bookDir, raw, fixedimage):
     slst = None
     file(os.path.join(bookDir, 'index_svg.xhtml'), 'wb').write(svgindex)
 
-    print " "
+    print(" ")
 
     # build the opf file
     opfname = os.path.join(bookDir, 'book.opf')
@@ -667,20 +667,20 @@ def generateBook(bookDir, raw, fixedimage):
     olst = None
     file(opfname, 'wb').write(opfstr)
 
-    print 'Processing Complete'
+    print('Processing Complete')
 
     return 0
 
 def usage():
-    print "genbook.py generates a book from the extract Topaz Files"
-    print "Usage:"
-    print "    genbook.py [-r] [-h [--fixed-image] <bookDir>  "
-    print "  "
-    print "Options:"
-    print "  -h            :  help - print this usage message"
-    print "  -r            :  generate raw svg files (not wrapped in xhtml)"
-    print "  --fixed-image :  genearate any Fixed Area as an svg image in the html"
-    print "  "
+    print("genbook.py generates a book from the extract Topaz Files")
+    print("Usage:")
+    print("    genbook.py [-r] [-h [--fixed-image] <bookDir>  ")
+    print("  ")
+    print("Options:")
+    print("  -h            :  help - print this usage message")
+    print("  -r            :  generate raw svg files (not wrapped in xhtml)")
+    print("  --fixed-image :  genearate any Fixed Area as an svg image in the html")
+    print("  ")
 
 
 def main(argv):
@@ -691,8 +691,8 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv[1:], "rh:",["fixed-image"])
 
-    except getopt.GetoptError, err:
-        print str(err)
+    except getopt.GetoptError as err:
+        print(str(err))
         usage()
         return 1
 

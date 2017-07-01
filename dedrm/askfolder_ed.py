@@ -164,15 +164,15 @@ def AskFolder(
     def BrowseCallback(hwnd, uMsg, lParam, lpData):
         if uMsg == BFFM_INITIALIZED:
             if actionButtonLabel:
-                label = unicode(actionButtonLabel, errors='replace')
+                label = str(actionButtonLabel, errors='replace')
                 user32.SendMessageW(hwnd, BFFM_SETOKTEXT, 0, label)
             if cancelButtonLabel:
-                label = unicode(cancelButtonLabel, errors='replace')
+                label = str(cancelButtonLabel, errors='replace')
                 cancelButton = user32.GetDlgItem(hwnd, IDCANCEL)
                 if cancelButton:
                     user32.SetWindowTextW(cancelButton, label)
             if windowTitle:
-                title = unicode(windowTitle, erros='replace')
+                title = str(windowTitle, erros='replace')
                 user32.SetWindowTextW(hwnd, title)
             if defaultLocation:
                 user32.SendMessageW(hwnd, BFFM_SETSELECTIONW, 1, defaultLocation.replace('/', '\\'))
@@ -200,7 +200,7 @@ def AskFolder(
     if not pidl:
         result = None
     else:
-        path = LPCWSTR(u" " * (MAX_PATH+1))
+        path = LPCWSTR(" " * (MAX_PATH+1))
         shell32.SHGetPathFromIDListW(pidl, path)
         ole32.CoTaskMemFree(pidl)
         result = path.value

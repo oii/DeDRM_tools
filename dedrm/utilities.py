@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import with_statement
+
 
 __license__ = 'GPL v3'
 
@@ -19,8 +19,8 @@ DETAILED_MESSAGE = \
 
 def uStrCmp (s1, s2, caseless=False):
     import unicodedata as ud
-    str1 = s1 if isinstance(s1, unicode) else unicode(s1)
-    str2 = s2 if isinstance(s2, unicode) else unicode(s2)
+    str1 = s1 if isinstance(s1, str) else str(s1)
+    str2 = s2 if isinstance(s2, str) else str(s2)
     if caseless:
         return ud.normalize('NFC', str1.lower()) == ud.normalize('NFC', str2.lower())
     else:

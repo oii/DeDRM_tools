@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import with_statement
+
 __license__   = 'GPL v3'
 __docformat__ = 'restructuredtext en'
 
@@ -64,6 +64,6 @@ __docformat__ = 'restructuredtext en'
 Decrypt DRMed ebooks.
 """
 
-PLUGIN_NAME = u"DeDRM"
+PLUGIN_NAME = "DeDRM"
 PLUGIN_VERSION_TUPLE = (6, 5, 4)
-PLUGIN_VERSION = u".".join([unicode(str(x)) for x in PLUGIN_VERSION_TUPLE])
+PLUGIN_VERSION = ".".join([str(str(x)) for x in PLUGIN_VERSION_TUPLE])

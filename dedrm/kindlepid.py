@@ -24,7 +24,7 @@ class SafeUnbuffered:
         if self.encoding == None:
             self.encoding = "utf-8"
     def write(self, data):
-        if isinstance(data,unicode):
+        if isinstance(data,str):
             data = data.encode(self.encoding,"replace")
         self.stream.write(data)
         self.stream.flush()
@@ -62,18 +62,18 @@ def unicode_argv():
             # Remove Python executable and commands if present
             start = argc.value - len(sys.argv)
             return [argv[i] for i in
-                    xrange(start, argc.value)]
+                    range(start, argc.value)]
         # if we don't have any arguments at all, just pass back script name
         # this should never happen
-        return [u"kindlepid.py"]
+        return ["kindlepid.py"]
     else:
         argvencoding = sys.stdin.encoding
         if argvencoding == None:
             argvencoding = "utf-8"
-        return [arg if (type(arg) == unicode) else unicode(arg,argvencoding) for arg in sys.argv]
+        return [arg if (type(arg) == str) else str(arg,argvencoding) for arg in sys.argv]
 
 if sys.hexversion >= 0x3000000:
-    print 'This script is incompatible with Python 3.x. Please install Python 2.7.x.'
+    print('This script is incompatible with Python 3.x. Please install Python 2.7.x.')
     sys.exit(2)
 
 letters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789'
@@ -98,43 +98,43 @@ def pidFromSerial(s, l):
     crc = crc32(s)
 
     arr1 = [0]*l
-    for i in xrange(len(s)):
+    for i in range(len(s)):
         arr1[i%l] ^= ord(s[i])
 
     crc_bytes = [crc >> 24 & 0xff, crc >> 16 & 0xff, crc >> 8 & 0xff, crc & 0xff]
-    for i in xrange(l):
+    for i in range(l):
         arr1[i] ^= crc_bytes[i&3]
 
     pid = ''
-    for i in xrange(l):
+    for i in range(l):
         b = arr1[i] & 0xff
         pid+=letters[(b >> 7) + ((b >> 5 & 3) ^ (b & 0x1f))]
 
     return pid
 
 def cli_main():
-    print u"Mobipocket PID calculator for Amazon Kindle. Copyright © 2007, 2009 Igor Skochinsky"
+    print("Mobipocket PID calculator for Amazon Kindle. Copyright © 2007, 2009 Igor Skochinsky")
     argv=unicode_argv()
     if len(argv)==2:
         serial = argv[1]
     else:
-        print u"Usage: kindlepid.py <Kindle Serial Number>/<iPhone/iPod Touch UDID>"
+        print("Usage: kindlepid.py <Kindle Serial Number>/<iPhone/iPod Touch UDID>")
         return 1
     if len(serial)==16:
         if serial.startswith("B") or serial.startswith("9"):
-            print u"Kindle serial number detected"
+            print("Kindle serial number detected")
         else:
-            print u"Warning: unrecognized serial number. Please recheck input."
+            print("Warning: unrecognized serial number. Please recheck input.")
             return 1
         pid = pidFromSerial(serial.encode("utf-8"),7)+'*'
-        print u"Mobipocket PID for Kindle serial#{0} is {1}".format(serial,checksumPid(pid))
+        print("Mobipocket PID for Kindle serial#{0} is {1}".format(serial,checksumPid(pid)))
         return 0
     elif len(serial)==40:
-        print u"iPhone serial number (UDID) detected"
+        print("iPhone serial number (UDID) detected")
         pid = pidFromSerial(serial.encode("utf-8"),8)
-        print u"Mobipocket PID for iPhone serial#{0} is {1}".format(serial,checksumPid(pid))
+        print("Mobipocket PID for iPhone serial#{0} is {1}".format(serial,checksumPid(pid)))
         return 0
-    print u"Warning: unrecognized serial number. Please recheck input."
+    print("Warning: unrecognized serial number. Please recheck input.")
     return 1
 
 

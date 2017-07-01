@@ -14,7 +14,7 @@
 Provide base64 encoding.
 """
 
-from __future__ import with_statement
+
 
 __license__ = 'GPL v3'
 
@@ -23,9 +23,9 @@ import os
 import base64
 
 def usage(progname):
-    print "Applies base64 encoding to the supplied file, sending to standard output"
-    print "Usage:"
-    print "    %s <infile>" % progname
+    print("Applies base64 encoding to the supplied file, sending to standard output")
+    print("Usage:")
+    print("    %s <infile>" % progname)
 
 def cli_main(argv=sys.argv):
     progname = os.path.basename(argv[0])
@@ -37,7 +37,7 @@ def cli_main(argv=sys.argv):
     keypath = argv[1]
     with open(keypath, 'rb') as f:
         keyder = f.read()
-        print keyder.encode('base64')
+        print(keyder.encode('base64'))
     return 0
 
 

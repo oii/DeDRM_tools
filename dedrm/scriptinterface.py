@@ -24,7 +24,7 @@ def decryptepub(infile, outdir, rscpath):
     zippath = os.path.join(bpath,name + '_temp.zip')
     rv = zipfix.repairBook(infile, zippath)
     if rv != 0:
-        print "Error while trying to fix epub"
+        print("Error while trying to fix epub")
         return rv
 
     # determine a good name for the output file
@@ -36,7 +36,7 @@ def decryptepub(infile, outdir, rscpath):
         # try with any keyfiles (*.der) in the rscpath
         files = os.listdir(rscpath)
         filefilter = re.compile("\.der$", re.IGNORECASE)
-        files = filter(filefilter.search, files)
+        files = list(filter(filefilter.search, files))
         if files:
             for filename in files:
                 keypath = os.path.join(rscpath, filename)
@@ -44,9 +44,9 @@ def decryptepub(infile, outdir, rscpath):
                 try:
                     rv = ineptepub.decryptBook(userkey, zippath, outfile)
                     if rv == 0:
-                        print "Decrypted Adobe ePub with key file {0}".format(filename)
+                        print("Decrypted Adobe ePub with key file {0}".format(filename))
                         break
-                except Exception, e:
+                except Exception as e:
                     errlog += traceback.format_exc()
                     errlog += str(e)
                     rv = 1
@@ -55,7 +55,7 @@ def decryptepub(infile, outdir, rscpath):
         # try with any keyfiles (*.b64) in the rscpath
         files = os.listdir(rscpath)
         filefilter = re.compile("\.b64$", re.IGNORECASE)
-        files = filter(filefilter.search, files)
+        files = list(filter(filefilter.search, files))
         if files:
             for filename in files:
                 keypath = os.path.join(rscpath, filename)
@@ -64,23 +64,23 @@ def decryptepub(infile, outdir, rscpath):
                 try:
                     rv = ignobleepub.decryptBook(userkey, zippath, outfile)
                     if rv == 0:
-                        print "Decrypted B&N ePub with key file {0}".format(filename)
+                        print("Decrypted B&N ePub with key file {0}".format(filename))
                         break
-                except Exception, e:
+                except Exception as e:
                     errlog += traceback.format_exc()
                     errlog += str(e)
                     rv = 1
     else:
         encryption = epubtest.encryption(zippath)
         if encryption == "Unencrypted":
-            print "{0} is not DRMed.".format(name)
+            print("{0} is not DRMed.".format(name))
             rv = 0
         else:
-            print "{0} has an unknown encryption.".format(name)
+            print("{0} has an unknown encryption.".format(name))
 
     os.remove(zippath)
     if rv != 0:
-        print errlog
+        print(errlog)
     return rv
 
 
@@ -95,7 +95,7 @@ def decryptpdf(infile, outdir, rscpath):
     # try with any keyfiles (*.der) in the rscpath
     files = os.listdir(rscpath)
     filefilter = re.compile("\.der$", re.IGNORECASE)
-    files = filter(filefilter.search, files)
+    files = list(filter(filefilter.search, files))
     if files:
         for filename in files:
             keypath = os.path.join(rscpath, filename)
@@ -104,13 +104,13 @@ def decryptpdf(infile, outdir, rscpath):
                 rv = ineptpdf.decryptBook(userkey, infile, outfile)
                 if rv == 0:
                     break
-            except Exception, e:
+            except Exception as e:
                 errlog += traceback.format_exc()
                 errlog += str(e)
                 rv = 1
 
     if rv != 0:
-        print errlog
+        print(errlog)
     return rv
 
 
@@ -127,11 +127,11 @@ def decryptpdb(infile, outdir, rscpath):
             try:
                 name, cc8 = i.split(':')
             except ValueError:
-                print '   Error parsing user supplied social drm data.'
+                print('   Error parsing user supplied social drm data.')
                 return 1
             try:
                 rv = erdr2pml.decryptBook(infile, outpath, True, erdr2pml.getuser_key(name, cc8))
-            except Exception, e:
+            except Exception as e:
                 errlog += traceback.format_exc()
                 errlog += str(e)
                 rv = 1
@@ -162,7 +162,7 @@ def decryptk4mobi(infile, outdir, rscpath):
     kDatabaseFiles = []
     files = os.listdir(rscpath)
     filefilter = re.compile("\.k4i$", re.IGNORECASE)
-    files = filter(filefilter.search, files)
+    files = list(filter(filefilter.search, files))
     if files:
         for filename in files:
             dpath = os.path.join(rscpath,filename)
@@ -170,28 +170,28 @@ def decryptk4mobi(infile, outdir, rscpath):
     androidFiles = []
     files = os.listdir(rscpath)
     filefilter = re.compile("\.ab$", re.IGNORECASE)
-    files = filter(filefilter.search, files)
+    files = list(filter(filefilter.search, files))
     if files:
         for filename in files:
             dpath = os.path.join(rscpath,filename)
             androidFiles.append(dpath)
     files = os.listdir(rscpath)
     filefilter = re.compile("\.db$", re.IGNORECASE)
-    files = filter(filefilter.search, files)
+    files = list(filter(filefilter.search, files))
     if files:
         for filename in files:
             dpath = os.path.join(rscpath,filename)
             androidFiles.append(dpath)
     files = os.listdir(rscpath)
     filefilter = re.compile("\.xml$", re.IGNORECASE)
-    files = filter(filefilter.search, files)
+    files = list(filter(filefilter.search, files))
     if files:
         for filename in files:
             dpath = os.path.join(rscpath,filename)
             androidFiles.append(dpath)
     try:
         rv = k4mobidedrm.decryptBook(infile, outdir, kDatabaseFiles, androidFiles, serialnums, pidnums)
-    except Exception, e:
+    except Exception as e:
         errlog += traceback.format_exc()
         errlog += str(e)
         rv = 1

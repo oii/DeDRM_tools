@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import with_statement
+
 
 # kgenpids.py
 # Copyright © 2010-2015 by some_updates, Apprentice Alf and Apprentice Harper
@@ -154,13 +154,13 @@ def pidFromSerial(s, l):
     global charMap4
     crc = crc32(s)
     arr1 = [0]*l
-    for i in xrange(len(s)):
+    for i in range(len(s)):
         arr1[i%l] ^= ord(s[i])
     crc_bytes = [crc >> 24 & 0xff, crc >> 16 & 0xff, crc >> 8 & 0xff, crc & 0xff]
-    for i in xrange(l):
+    for i in range(l):
         arr1[i] ^= crc_bytes[i&3]
     pid = ""
-    for i in xrange(l):
+    for i in range(l):
         b = arr1[i] & 0xff
         pid+=charMap4[(b >> 7) + ((b >> 5 & 3) ^ (b & 0x1f))]
     return pid
@@ -170,7 +170,7 @@ def pidFromSerial(s, l):
 def getKindlePids(rec209, token, serialnum):
     pids=[]
 
-    if isinstance(serialnum,unicode):
+    if isinstance(serialnum,str):
         serialnum = serialnum.encode('utf-8')
 
     # Compute book PID
@@ -206,7 +206,7 @@ def getK4Pids(rec209, token, kindleDatabase):
         UserName = (kindleDatabase[1])['UserName'].decode('hex')
 
     except KeyError:
-        print u"Keys not found in the database {0}.".format(kindleDatabase[0])
+        print("Keys not found in the database {0}.".format(kindleDatabase[0]))
         return pids
 
     try:
@@ -265,15 +265,15 @@ def getPidList(md1, md2, serials=[], kDatabases=[]):
     for kDatabase in kDatabases:
         try:
             pidlst.extend(getK4Pids(md1, md2, kDatabase))
-        except Exception, e:
-            print u"Error getting PIDs from database {0}: {1}".format(kDatabase[0],e.args[0])
+        except Exception as e:
+            print("Error getting PIDs from database {0}: {1}".format(kDatabase[0],e.args[0]))
             traceback.print_exc()
 
     for serialnum in serials:
         try:
             pidlst.extend(getKindlePids(md1, md2, serialnum))
-        except Exception, e:
-            print u"Error getting PIDs from serial number {0}: {1}".format(serialnum ,e.args[0])
+        except Exception as e:
+            print("Error getting PIDs from serial number {0}: {1}".format(serialnum ,e.args[0]))
             traceback.print_exc()
 
     return pidlst

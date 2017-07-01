@@ -19,7 +19,7 @@ class SimplePrefs(object):
             self.file2key[filename] = key
         self.target = target + 'Prefs'
         if sys.platform.startswith('win'):
-            import _winreg as winreg
+            import winreg as winreg
             regkey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\")
             path = winreg.QueryValueEx(regkey, 'Local AppData')[0]
             prefdir = path + os.sep + self.target
@@ -46,7 +46,7 @@ class SimplePrefs(object):
                     try :
                         data = file(filepath,'rb').read()
                         self.prefs[key] = data
-                    except Exception, e:
+                    except Exception as e:
                         pass
 
     def getPreferences(self):
@@ -71,7 +71,7 @@ class SimplePrefs(object):
                     else:
                         try:
                             file(filepath,'wb').write(data)
-                        except Exception, e:
+                        except Exception as e:
                             pass
         self.prefs = newprefs
         return
