@@ -160,7 +160,7 @@ def encodeHash(data,map):
 
 # Decode the string in data with the characters in map. Returns the decoded bytes
 def decode(data,map):
-    result = ''
+    result = b''
     for i in range (0,len(data)-1,2):
         high = map.find(data[i])
         low = map.find(data[i+1])
@@ -1024,7 +1024,7 @@ if iswindows:
         # the .kinf file uses "/" to separate it into records
         # so remove the trailing "/" to make it easy to use split
         data = data[:-1]
-        items = data.split('/')
+        items = data.split(b'/')
 
         # starts with an encoded and encrypted header blob
         headerblob = items.pop(0)
@@ -1224,8 +1224,8 @@ elif isosx:
     LibCrypto = _load_crypto()
 
     # Various character maps used to decrypt books. Probably supposed to act as obfuscation
-    charMap1 = 'n5Pr6St7Uv8Wx9YzAb0Cd1Ef2Gh3Jk4M'
-    charMap2 = 'ZB0bYyc1xDdW2wEV3Ff7KkPpL8UuGA4gz-Tme9Nn_tHh5SvXCsIiR6rJjQaqlOoM'
+    charMap1 = b'n5Pr6St7Uv8Wx9YzAb0Cd1Ef2Gh3Jk4M'
+    charMap2 = b'ZB0bYyc1xDdW2wEV3Ff7KkPpL8UuGA4gz-Tme9Nn_tHh5SvXCsIiR6rJjQaqlOoM'
 
     # For kinf approach of K4Mac 1.6.X or later
     # On K4PC charMap5 = 'AzB0bYyCeVvaZ3FfUuG4g-TtHh5SsIiR6rJjQq7KkPpL8lOoMm9Nn_c1XxDdW2wE'
@@ -1233,7 +1233,7 @@ elif isosx:
     charMap5 = charMap2
 
     # new in K4M 1.9.X
-    testMap8 = 'YvaZ3FfUm9Nn_c1XuG4yCAzB0beVg-TtHh5SsIiR6rJjQdW2wEq7KkPpL8lOoMxD'
+    testMap8 = b'YvaZ3FfUm9Nn_c1XuG4yCAzB0beVg-TtHh5SsIiR6rJjQdW2wEq7KkPpL8lOoMxD'
 
     # uses a sub process to get the Hard Drive Serial Number using ioreg
     # returns serial numbers of all internal hard drive drives
@@ -1247,11 +1247,11 @@ elif isosx:
         p = subprocess.Popen(cmdline, shell=True, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=False)
         out1, out2 = p.communicate()
         #print out1
-        reslst = out1.split('\n')
+        reslst = out1.split(b'\n')
         cnt = len(reslst)
         for j in range(cnt):
             resline = reslst[j]
-            pp = resline.find('\"Serial Number\" = \"')
+            pp = resline.find(b'\"Serial Number\" = \"')
             if pp >= 0:
                 sernum = resline[pp+19:-1]
                 sernums.append(sernum.strip())
@@ -1263,12 +1263,12 @@ elif isosx:
         cmdline = cmdline.encode(sys.getfilesystemencoding())
         p = subprocess.Popen(cmdline, shell=True, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=False)
         out1, out2 = p.communicate()
-        reslst = out1.split('\n')
+        reslst = out1.split(b'\n')
         cnt = len(reslst)
         for j in range(cnt):
             resline = reslst[j]
-            if resline.startswith('/dev'):
-                (devpart, mpath) = resline.split(' on ')[:2]
+            if resline.startswith(b'/dev'):
+                (devpart, mpath) = resline.split(b' on ')[:2]
                 dpart = devpart[5:]
                 names.append(dpart)
         return names
@@ -1284,11 +1284,11 @@ elif isosx:
         p = subprocess.Popen(cmdline, shell=True, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=False)
         out1, out2 = p.communicate()
         #print out1
-        reslst = out1.split('\n')
+        reslst = out1.split(b'\n')
         cnt = len(reslst)
         for j in range(cnt):
             resline = reslst[j]
-            pp = resline.find('\"UUID\" = \"')
+            pp = resline.find(b'\"UUID\" = \"')
             if pp >= 0:
                 uuidnum = resline[pp+10:-1]
                 uuidnum = uuidnum.strip()
@@ -1304,16 +1304,16 @@ elif isosx:
         cmdline = cmdline.encode(sys.getfilesystemencoding())
         p = subprocess.Popen(cmdline, shell=True, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=False)
         out1, out2 = p.communicate()
-        reslst = out1.split('\n')
+        reslst = out1.split(b'\n')
         cnt = len(reslst)
         for j in range(cnt):
             resline = reslst[j]
-            pp = resline.find('Ethernet Address: ')
+            pp = resline.find(b'Ethernet Address: ')
             if pp >= 0:
                 #print resline
                 macnum = resline[pp+18:]
                 macnum = macnum.strip()
-                maclst = macnum.split(':')
+                maclst = macnum.split(b':')
                 n = len(maclst)
                 if n != 6:
                     continue
@@ -1321,7 +1321,7 @@ elif isosx:
                 # now munge it up the way Kindle app does
                 # by xoring it with 0xa5 and swapping elements 3 and 4
                 for i in range(6):
-                    maclst[i] = int('0x' + maclst[i], 0)
+                    maclst[i] = int(b'0x' + maclst[i], 0)
                 mlst = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
                 mlst[5] = maclst[5] ^ 0xa5
                 mlst[4] = maclst[3] ^ 0xa5
@@ -1329,7 +1329,7 @@ elif isosx:
                 mlst[2] = maclst[2] ^ 0xa5
                 mlst[1] = maclst[1] ^ 0xa5
                 mlst[0] = maclst[0] ^ 0xa5
-                macnum = '%0.2x%0.2x%0.2x%0.2x%0.2x%0.2x' % (mlst[0], mlst[1], mlst[2], mlst[3], mlst[4], mlst[5])
+                macnum = b'%0.2x%0.2x%0.2x%0.2x%0.2x%0.2x' % (mlst[0], mlst[1], mlst[2], mlst[3], mlst[4], mlst[5])
                 #print 'munged mac', macnum
                 macnums.append(macnum)
         return macnums
@@ -1348,7 +1348,7 @@ elif isosx:
         strings.extend(GetVolumesSerialNumbers())
         strings.extend(GetDiskPartitionNames())
         strings.extend(GetDiskPartitionUUIDs())
-        strings.append('9999999999')
+        strings.append(b'9999999999')
         #print "ID Strings:\n",strings
         return strings
 
@@ -1356,8 +1356,8 @@ elif isosx:
     # unprotect the new header blob in .kinf2011
     # used in Kindle for Mac Version >= 1.9.0
     def UnprotectHeaderData(encryptedData):
-        passwdData = 'header_key_data'
-        salt = 'HEADER.2011'
+        passwdData = b'header_key_data'
+        salt = b'HEADER.2011'
         iter = 0x80
         keylen = 0x100
         crp = LibCrypto()
@@ -1461,13 +1461,13 @@ elif isosx:
             filedata = infoReader.read()
 
         data = filedata[:-1]
-        items = data.split('/')
+        # items = data.split(b'/')
         IDStrings = GetIDStrings()
         for IDString in IDStrings:
             #print "trying IDString:",IDString
             try:
                 DB = {}
-                items = data.split('/')
+                items = data.split(b'/')
 
                 # the headerblob is the encrypted information needed to build the entropy string
                 headerblob = items.pop(0)
@@ -1476,9 +1476,9 @@ elif isosx:
 
                 # now extract the pieces in the same way
                 # this version is different from K4PC it scales the build number by multipying by 735
-                pattern = re.compile(r'''\[Version:(\d+)\]\[Build:(\d+)\]\[Cksum:([^\]]+)\]\[Guid:([\{\}a-z0-9\-]+)\]''', re.IGNORECASE)
+                pattern = re.compile(b'''\[Version:(\d+)\]\[Build:(\d+)\]\[Cksum:([^\]]+)\]\[Guid:([\{\}a-z0-9\-]+)\]''', re.IGNORECASE)
                 for m in re.finditer(pattern, cleartext):
-                    entropy = str(int(m.group(2)) * 0x2df) + m.group(4)
+                    entropy = bytes(int(m.group(2)) * 0x2df) + m.group(4)
 
                 cud = CryptUnprotectData(entropy,IDString)
 
