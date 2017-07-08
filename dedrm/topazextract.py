@@ -16,7 +16,8 @@ import zlib, zipfile, tempfile, shutil
 import traceback
 from struct import pack
 from struct import unpack
-from alfcrypto import Topaz_Cipher
+
+from dedrm.alfcrypto import Topaz_Cipher
 
 class SafeUnbuffered:
     def __init__(self, stream):
@@ -81,7 +82,7 @@ if 'calibre' in sys.modules:
     from calibre_plugins.dedrm import kgenpids
 else:
     inCalibre = False
-    import kgenpids
+    from dedrm import kgenpids
 
 
 class DrmException(Exception):
@@ -356,7 +357,7 @@ class TopazBook:
 
         self.setBookKey(bookKey)
         self.createBookDirectory()
-        self.extractFiles() 
+        self.extractFiles()
         print u"Successfully Extracted Topaz contents"
         if inCalibre:
             from calibre_plugins.dedrm import genbook

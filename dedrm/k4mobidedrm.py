@@ -84,10 +84,10 @@ if inCalibre:
     from calibre_plugins.dedrm import kgenpids
     from calibre_plugins.dedrm import androidkindlekey
 else:
-    import mobidedrm
-    import topazextract
-    import kgenpids
-    import androidkindlekey
+    from dedrm import mobidedrm
+    from dedrm import topazextract
+    from dedrm import kgenpids
+    from dedrm import androidkindlekey
 
 # Wrap a stream so that output gets flushed immediately
 # and also make sure that any unicode strings get
@@ -198,7 +198,7 @@ def GetDecryptedBook(infile, kDatabases, androidFiles, serials, pids, starttime 
     magic8 = open(infile,'rb').read(8)
     if magic8 == '\xeaDRMION\xee':
         raise DrmException(u"KFX format detected. This format cannot be decrypted yet.")
-        
+
     magic3 = magic8[:3]
     if magic3 == 'TPZ':
         mobi = False

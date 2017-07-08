@@ -5,14 +5,15 @@
 import sys
 import os
 import re
-import ineptepub
-import ignobleepub
-import epubtest
-import zipfix
-import ineptpdf
-import erdr2pml
-import k4mobidedrm
 import traceback
+
+from dedrm import ineptepub
+from dedrm import ignobleepub
+from dedrm import epubtest
+from dedrm import zipfix
+from dedrm import ineptpdf
+from dedrm import erdr2pml
+from dedrm import k4mobidedrm
 
 def decryptepub(infile, outdir, rscpath):
     errlog = ''
