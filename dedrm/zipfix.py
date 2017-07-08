@@ -20,12 +20,12 @@ __version__ = "1.1"
 
 import sys
 import zlib
-import zipfilerugged
 import os
 import os.path
 import getopt
 from struct import unpack
 
+from dedrm import zipfilerugged
 
 _FILENAME_LEN_OFFSET = 26
 _EXTRA_LEN_OFFSET = 28

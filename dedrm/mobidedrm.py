@@ -78,7 +78,7 @@ import os
 import struct
 import binascii
 try:
-    from alfcrypto import Pukall_Cipher
+    from dedrm.alfcrypto import Pukall_Cipher
 except:
     print u"AlfCrypto not found. Using python PC1 implementation."
 
@@ -247,7 +247,7 @@ class MobiBook:
         print u"MobiDeDrm v{0:s}.\nCopyright © 2008-2012 The Dark Reverser et al.".format(__version__)
 
         try:
-            from alfcrypto import Pukall_Cipher
+            from dedrm.alfcrypto import Pukall_Cipher
         except:
             print u"AlfCrypto not found. Using python PC1 implementation."
 
