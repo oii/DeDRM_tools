@@ -185,7 +185,7 @@ if iswindows:
 
     try:
         # try to get fast routines from alfcrypto
-        from alfcrypto import AES_CBC, KeyIVGen
+        from dedrm.alfcrypto import AES_CBC, KeyIVGen
     except:
         # alfcrypto not available, so use python implementations
         """
@@ -1482,7 +1482,7 @@ elif isosx:
             try:
                 DB = {}
                 items = data.split('/')
-               
+
                 # the headerblob is the encrypted information needed to build the entropy string
                 headerblob = items.pop(0)
                 encryptedValue = decode(headerblob, charMap1)

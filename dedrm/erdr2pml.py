@@ -149,14 +149,14 @@ if iswindows:
         if inCalibre:
             from calibre_plugins.dedrm import openssl_des
         else:
-            import openssl_des
+            from dedrm import openssl_des
         Des = openssl_des.load_libcrypto()
 else:
     # first try with openssl
     if inCalibre:
         from calibre_plugins.dedrm import openssl_des
     else:
-        import openssl_des
+        from dedrm import openssl_des
     Des = openssl_des.load_libcrypto()
     if Des == None:
         # then try with pycrypto

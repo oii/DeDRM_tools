@@ -86,11 +86,11 @@ if inCalibre:
     from calibre_plugins.dedrm import androidkindlekey
     from calibre_plugins.dedrm import kfxdedrm
 else:
-    import mobidedrm
-    import topazextract
-    import kgenpids
-    import androidkindlekey
-    import kfxdedrm
+    from dedrm import mobidedrm
+    from dedrm import topazextract
+    from dedrm import kgenpids
+    from dedrm import androidkindlekey
+    from dedrm import kfxdedrm
 
 # Wrap a stream so that output gets flushed immediately
 # and also make sure that any unicode strings get
