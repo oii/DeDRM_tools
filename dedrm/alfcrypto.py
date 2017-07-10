@@ -244,7 +244,7 @@ def _load_python_alfcrypto():
             cleartext = self.aes.decrypt(iv + data)
             return cleartext
 
-    print u"Using Library AlfCrypto Python"
+    #print u"Using Library AlfCrypto Python"
     return (AES_CBC, Pukall_Cipher, Topaz_Cipher)
 
 
